@@ -603,86 +603,96 @@ function calculateTotalQuestions(paperSets) {
 }
 
 app.post('/api/check-code', async (req, res) => {
-  const { uniqueCode } = req.body;
-
+  const { uniqueCode, username } = req.body;
   try {
-      // Connect to MongoDB and find the paper
-      const paper = await Paper.findOne({
-          $or: [
-              { 'paperSets.setA.uniqueCode': uniqueCode },
-              { 'paperSets.setB.uniqueCode': uniqueCode },
-              { 'paperSets.setC.uniqueCode': uniqueCode }
-          ]
-      }).maxTimeMS(100000);
+    const existingTest = await StudentTest.findOne({
+      studentUsername: username,
+      uniqueCode: uniqueCode
+    });
 
-      if (!paper) {
-          // If paper is not found, return 404 with appropriate error message
-          return res.status(404).json({ error: 'Paper not found' });
-      }
+    if (existingTest) {
+      // If the student has already taken the test, return an error response
+      return res.status(404).json({ error: 'Student has already taken this test' });
+    }
+    // Connect to MongoDB and find the paper
+    const paper = await Paper.findOne({
+      $or: [
+        { 'paperSets.setA.uniqueCode': uniqueCode },
+        { 'paperSets.setB.uniqueCode': uniqueCode },
+        { 'paperSets.setC.uniqueCode': uniqueCode }
+      ]
+    }).maxTimeMS(100000);
 
-      // Determine which set contains the unique code
-      let set = null;
-      if (paper.paperSets.setA.uniqueCode === uniqueCode) {
-          set = 'setA';
-      } else if (paper.paperSets.setB.uniqueCode === uniqueCode) {
-          set = 'setB';
-      } else if (paper.paperSets.setC.uniqueCode === uniqueCode) {
-          set = 'setC';
-      }
+    if (!paper) {
+      // If paper is not found, return 404 with appropriate error message
+      return res.status(404).json({ error: 'Paper not found' });
+    }
 
-      if (!set) {
-          // If set is not determined, return 404 with appropriate error message
-          return res.status(404).json({ error: 'Unique code not found in any set' });
-      }
-      console.log(paper.paperSets[set].questions);
-      console.log(paper.paperName);
-      console.log(paper.teacherUsername);
+    // Determine which set contains the unique code
+    let set = null;
+    if (paper.paperSets.setA.uniqueCode === uniqueCode) {
+      set = 'setA';
+    } else if (paper.paperSets.setB.uniqueCode === uniqueCode) {
+      set = 'setB';
+    } else if (paper.paperSets.setC.uniqueCode === uniqueCode) {
+      set = 'setC';
+    }
 
-      // Return questions of the found set
-      res.status(200).json({
-          paperName: paper.paperName,
-          teacherUsername: paper.teacherUsername,
-          questions: paper.paperSets[set].questions
-      });
+    if (!set) {
+      // If set is not determined, return 404 with appropriate error message
+      return res.status(404).json({ error: 'Unique code not found in any set' });
+    }
+    console.log(paper.paperSets[set].questions);
+    console.log(paper.paperName);
+    console.log(paper.teacherUsername);
+
+    // Return questions of the found set
+    res.status(200).json({
+      paperName: paper.paperName,
+      teacherUsername: paper.teacherUsername,
+      questions: paper.paperSets[set].questions
+    });
   } catch (error) {
-      console.error('Error checking code:', error);
-      res.status(500).json({ error: 'Failed to check code' });
+    console.error('Error checking code:', error);
+    res.status(500).json({ error: 'Failed to check code' });
   }
 });
 
 const studentTestSchema = new mongoose.Schema({
+  teacherUsername: { type: String, required: true },
   studentUsername: { type: String, required: true },
   testName: { type: String, required: true },
   testDate: { type: Date, required: true },
   questions: [{
-      questionId: { type: String, required: true },
-      questionTitle: { type: String, required: true },
-      selectedOption: { type: String, required: true },
-      correctOption: { type: String, required: true },
-      isCorrect: { type: Boolean, required: true }
+    questionId: { type: String, required: true },
+    questionTitle: { type: String, required: true },
+    selectedOption: { type: String, required: true },
+    correctOption: { type: String, required: true },
+    isCorrect: { type: Boolean, required: true }
   }],
   Marks: { type: Number, required: true },
   uniqueCode: { type: String, required: true } // Define uniqueCode field
-},{ versionKey: false });
+}, { versionKey: false });
 
 // Create a model from the schema
-const StudentTest = mongoose.model('StudentTest', studentTestSchema,'studenttests');
+const StudentTest = mongoose.model('StudentTest', studentTestSchema, 'studenttests');
 app.post('/api/studentTests', async (req, res) => {
   try {
     const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
     await client.connect();
-    const { studentUsername, testName, testDate, questions, Marks,uniqueCode } = req.body;
+    const { teacherUsername,studentUsername, testName, testDate, questions, Marks, uniqueCode } = req.body;
     const numericMarks = Number(Marks);
     // Validate Marks value
     if (isNaN(numericMarks)) {
       throw new Error('Invalid value for Marks');
     }
     const studentTest = new StudentTest({
+      teacherUsername,
       studentUsername,
       testName,
       testDate,
       questions,
-      Marks:numericMarks,
+      Marks: numericMarks,
       uniqueCode,
     });
 
@@ -692,10 +702,76 @@ app.post('/api/studentTests', async (req, res) => {
     // Respond with a success message
     res.json({ message: 'Test data saved successfully' });
   } catch (error) {
-      console.error('Error saving test data:', error);
-      res.status(500).json({ error: 'Failed to save test data. Please try again.' });
+    console.error('Error saving test data:', error);
+    res.status(500).json({ error: 'Failed to save test data. Please try again.' });
   }
 });
+
+
+app.post('/api/students/countno', async (req, res) => {
+  const { username } = req.body;
+  try {
+    if (!username) {
+      return res.status(404).json({ error: 'Username parameter is required' });
+    }
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+      const count = await StudentTest.countDocuments({ teacherUsername: username });
+    console.log(`COUNT FOR ${username} IS `, count); // Log the count value
+      res.json({ count });
+  } catch (error) {
+      console.error('Error fetching total students:', error);
+      res.status(500).json({ error: 'Failed to fetch total students' });
+  }
+});
+app.post('/api/studenttestinfo', async (req, res) => {
+  const { username } = req.body; // Assuming username is sent in the request body
+
+  try {
+    if (!username) {
+      return res.status(404).json({ error: 'Username parameter is required' });
+    }
+
+    // Ensure to establish MongoDB connection before querying
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+
+    // Fetch student tests based on teacherUsername matching username
+    const studentTests = await StudentTest.find({ teacherUsername: username });
+
+    // Format the fetched data for response
+    const formattedStudentTests = studentTests.map(test => ({
+      studentUsername: test.studentUsername,
+      testName: test.testName,
+      testDate: test.testDate,
+      totalQuestions: test.questions.length,
+      score: test.Marks,
+      uniqueCode: test.uniqueCode
+    }));
+
+    console.log("Formatted Student Tests:", formattedStudentTests);
+
+    // Send formatted data as JSON response
+    res.json(formattedStudentTests);
+  } catch (error) {
+    console.error('Error fetching student tests:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

@@ -46,12 +46,9 @@ const Profile2 = ({ setShowNavButtons }) => {
     }, [setShowNavButtons]);
 
     const handleLogout = () => {
-        // Perform logout actions here, such as clearing session, redirecting, etc.
-        console.log('Logged out'); // Example: Log out action
-        sessionStorage.removeItem('studentLoggedIn');
-        sessionStorage.removeItem('studentUsername');
-        // Replace with actual logout logic as needed
-        navigate('/'); // Programmatic navigation to login page
+        console.log('Logged out');
+        sessionStorage.clear();
+        navigate('/');
     };
 
     return (

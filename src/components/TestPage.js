@@ -10,6 +10,8 @@ const TestPage = ({ setShowNavButtons}) => {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [username,setUsername]=useState('');
     const [uniqueCode, setUniqueCode] = useState(''); 
+    const [teacherUsername, setTeacherUsername] = useState('');
+    const [showWarning, setShowWarning] = useState(true); 
 
     useEffect(() => {
         console.log(uniqueCode);
@@ -51,15 +53,24 @@ const TestPage = ({ setShowNavButtons}) => {
                 setUniqueCode(storedCode);
             }
         }
-
+        if (location.state?.teacherUsername) {
+            const teacher = location.state.teacherUsername;
+            sessionStorage.setItem('teacherUsername', teacher);
+            setTeacherUsername(teacher);
+        } else {
+            const storedTeacherUsername = sessionStorage.getItem('teacherUsername');
+            if (storedTeacherUsername) {
+                setTeacherUsername(storedTeacherUsername);
+            }
+        }
         console.log('Username:', username);
         console.log('Unique Code:', uniqueCode);
 
 
         const handleFullscreenChange = () => {
             if (!document.fullscreenElement) {
-                // If the user exits fullscreen, navigate back to the entrance page
-                navigate('/student-login');
+                    handleSubmit();
+                    navigate('/student-login');
             }
         };
 
@@ -151,6 +162,10 @@ const TestPage = ({ setShowNavButtons}) => {
         setCurrentQuestionIndex(prevIndex => prevIndex - 1);
     };
     const handleSubmit = async () => {
+        if (!paperDetails || !paperDetails.questions) {
+            console.error('Paper details or questions are null or undefined.');
+            return;
+        }    
         const answersToSubmit = paperDetails.questions.map((question, index) => {
             const selectedOption = selectedAnswers[index] || 'none';
             const correctOption = question.Answer;
@@ -175,7 +190,8 @@ const TestPage = ({ setShowNavButtons}) => {
             testDate: new Date(),
             questions: answersToSubmit,
             Marks:score,
-            uniqueCode:uniqueCode
+            uniqueCode:uniqueCode,
+            teacherUsername: teacherUsername 
         };
         
         try {
@@ -226,6 +242,11 @@ const TestPage = ({ setShowNavButtons}) => {
             <div className="container mx-auto max-w-3xl">
                 <h2 className="text-5xl font-bold mb-6 text-center font-serif text-white">{paperDetails.paperName}</h2>
                 <p className="text-2xl mb-6 text-end font-mono text-white">Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</p>
+                {showWarning && (
+                    <div className="mb-6 bg-yellow-200 text-yellow-800 p-4 rounded-lg">
+                        <p className="text-lg">Warning: Pressing ESC will submit the test. Do not press ESC again unless you want to submit.</p>
+                    </div>
+                )}
                 <div className="mb-6">
                     <p className="text-lg mb-4 bg-white p-4 rounded-lg">{currentQuestion.QuestionTitle}</p>
                     {options.map((option, index) => (

@@ -33,8 +33,7 @@ const TestCollection = ({ setShowNavButtons }) => {
 
     const handleLogout = () => {
         console.log('Logged out');
-        sessionStorage.removeItem('studentLoggedIn');
-        sessionStorage.removeItem('studentUsername');
+        sessionStorage.clear();
         navigate('/');
     };
 

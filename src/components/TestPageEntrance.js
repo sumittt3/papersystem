@@ -7,6 +7,7 @@ const TestPageEntrance = ({ setShowNavButtons }) => {
     const [paperDetails, setPaperDetails] = useState(null);
     const [username, setUsername] = useState('');
     const [uniqueCode, setUniqueCode] = useState('');
+    const [teacherUsername, setTeacherUsername] = useState('');
 
     // Effect to prevent navigation away from the test page
     useEffect(() => {
@@ -32,28 +33,32 @@ const TestPageEntrance = ({ setShowNavButtons }) => {
                 const details = location.state.paperDetails;
                 const name = location.state.username;
                 const code = location.state.uniqueCode;
+                const teacher = location.state.teacherUsername;
                 sessionStorage.setItem('paperDetails', JSON.stringify(details));
                 sessionStorage.setItem('username', name); // Store username in session storage
                 sessionStorage.setItem('uniqueCode', code); // Store uniqueCode in session storage
                 setPaperDetails(details);
                 setUsername(name);
                 setUniqueCode(code);
+                setTeacherUsername(teacher);
                 console.log('Paper details loaded:', details); // Log paperDetails to console
                 console.log('Username:', name); // Log username to console
                 console.log('Unique Code:', code); // Log uniqueCode to console
             } else {
-                // Check if paperDetails exists in session storage
                 const storedPaperDetails = sessionStorage.getItem('paperDetails');
                 const storedUsername = sessionStorage.getItem('username');
                 const storedUniqueCode = sessionStorage.getItem('uniqueCode');
-                if (storedPaperDetails && storedUsername && storedUniqueCode) {
+                const storedTeacherUsername = sessionStorage.getItem('teacherUsername');
+                if (storedPaperDetails && storedUsername && storedUniqueCode && storedTeacherUsername) {
                     const parsedDetails = JSON.parse(storedPaperDetails);
                     setPaperDetails(parsedDetails);
                     setUsername(storedUsername);
                     setUniqueCode(storedUniqueCode);
+                    setTeacherUsername(storedTeacherUsername);
                     console.log('Paper details loaded from session storage:', parsedDetails); // Log paperDetails to console
                     console.log('Username loaded from session storage:', storedUsername); // Log username to console
                     console.log('Unique Code loaded from session storage:', storedUniqueCode); // Log uniqueCode to console
+                    console.log('Teacher Username loaded from session storage:', storedTeacherUsername); // Log teacherUsername to console
                 }
             }
         };
@@ -106,7 +111,7 @@ const TestPageEntrance = ({ setShowNavButtons }) => {
         }
 
         // Navigate to the test page with shuffled questions
-        navigate('/TestPage', { state: updatedPaperDetails, username, uniqueCode });
+        navigate('/TestPage', { state: updatedPaperDetails, username, uniqueCode,teacherUsername });
     };
 
     // Function to handle before unload event

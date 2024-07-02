@@ -9,6 +9,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
     const { username } = useParams();
     const navigate = useNavigate();
     const [topStudents, setTopStudents] = useState([]);
+    const [studentTests, setStudentTests] = useState([]);
 
     useEffect(() => {
         const fetchPapers = async () => {
@@ -23,7 +24,37 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                 console.error('Error fetching papers:', error);
             }
         };
+
+        const fetchTotalStudents = async () => {
+            try {
+                const response = await axios.post(`http://localhost:3001/api/students/countno`, {
+                    username: username // Assuming 'username' is defined somewhere in your component
+                });
+                setTotalStudents(response.data.count); // Assuming your backend sends the count as { count: <number> }
+            } catch (error) {
+                console.error('Error fetching total students:', error);
+            }
+        };
+        const fetchStudentTests = async () => {
+            try {
+                const response = await axios.post(`http://localhost:3001/api/studenttestinfo`, {
+                        username: username // Send the username to match in student tests
+                    });
+                console.log(response.data);
+                setStudentTests(response.data); // Assuming your backend sends an array of student tests
+                const updatedStudentTests = response.data.map(test => ({
+                    ...test,
+                    percentage: ((test.score / test.totalQuestions) * 100).toFixed(2) // Calculate percentage and round to 2 decimal places
+                }));
+                const sortedByScore = [...updatedStudentTests].sort((a, b) => b.score - a.score);
+                setTopStudents(sortedByScore.slice(0, 3)); 
+            } catch (error) {
+                console.error('Error fetching student tests:', error);
+            }
+        };
         fetchPapers();
+        fetchTotalStudents();
+        fetchStudentTests();
     }, [username]);
 
     useEffect(() => {
@@ -33,8 +64,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
 
     const handleLogout = () => {
         console.log('Logged out');
-        sessionStorage.removeItem('teacherLoggedIn');
-        sessionStorage.removeItem('teacherUsername');
+        sessionStorage.clear();
         navigate('/');
     };
 
@@ -81,12 +111,12 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
 
                 <div className='row-span-3 col-span-2 bg-slate-700'>
                     <section id="top-performing-students" className="flex flex-wrap">
-                        <h2 className='text-3xl font-bold pl-56 pt-4'>Top Student </h2>
+                        <h2 className='text-3xl font-bold pl-56 pt-1'>Top Student </h2>
                         {topStudents.map((student, index) => (
-                            <div key={index} className="bg-white rounded-lg shadow-md p-4 m-2">
-                                <h3 className="text-lg font-bold mb-2">{index + 1}. {student.name}</h3>
-                                <p className="text-gray-600">Test Score: {student.testScore}</p>
-
+                            <div key={index} className="bg-white rounded-lg shadow-md p-4 pt-0 m-1 mt-3 w-96 h-20 ">
+                                <h3 className="text-lg font-bold text-black">{index + 1}. {student.studentUsername}</h3>
+                                <p className="text-gray-600">Test Score: {student.score}/{student.totalQuestions}</p>
+                                <p className="text-gray-600">Percentage: {student.percentage}%</p>
                             </div>
                         ))}
                     </section>
@@ -109,25 +139,30 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
             <div className='bg-slate-50'>
                 <h2 className="text-2xl font-bold text-gray-900 mx-auto max-w-7xl px-4 py-6">Student Test Information</h2>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
+                    <table className="w-screen mx-auto divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr className="text-left">
-                                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
-                                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
-                                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
-                                <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Test</th>
+                                <th scope="col" className="px-10 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Sr.No</th>
+                                <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Student UserName</th>
+                                <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Paper Name</th>
+                                <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Test</th>
+                                <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Set Unique Code</th>
+
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">12345</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">John Doe</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">85</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mathematics</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-06-30</td>
-                            </tr>
-                            {/* Add more <tr> elements for each student */}
+                            {studentTests.map((test, index) => (
+                                <tr key={index}>
+                                    <td className="px-10 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.studentUsername}</td>
+                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.testName}</td>
+                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.score}/{test.totalQuestions}</td>
+                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(test.testDate).toLocaleDateString()}</td>
+                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.uniqueCode}</td>
+
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

@@ -2,13 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function PaperGen({username}) {
+function PaperGen({username: initialUsername }) {
     const navigate = useNavigate();
     const [uniqueCode, setUniqueCode] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showTestButton, setShowTestButton] = useState(false);
     const [paperDetails, setPaperDetails] = useState({});
+    const [username, setUsername] = useState(initialUsername);
+
+    useEffect(() => {
+        setUsername(initialUsername);
+    }, [initialUsername]);
 
     const handleInputChange = (event) => {
         setUniqueCode(event.target.value);
@@ -24,7 +29,7 @@ function PaperGen({username}) {
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://localhost:3001/api/check-code`, { uniqueCode });
+            const response = await axios.post(`http://localhost:3001/api/check-code`, { uniqueCode,username });
 
             if (response.status === 200) {
                 setPaperDetails({
