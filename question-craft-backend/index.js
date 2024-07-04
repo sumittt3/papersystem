@@ -10,7 +10,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 const app = express();
-const port = 3001;
 const generatedCodes = new Set();
 
 // Middleware to parse JSON bodies
@@ -19,7 +18,8 @@ app.use(bodyParser.json());
 // Configure Multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const mongoURI = 'mongodb://192.168.116.131:27017,192.168.116.129:27017,192.168.116.132:27017,192.168.116.133:27018,192.168.116.134:27018/Question?replicaSet=rs0';
+const port=process.env.port;
+const mongoURI = process.env.MONGO_URI;
 
 // Apply CORS middleware to allow requests from localhost:3000
 app.use(cors({
