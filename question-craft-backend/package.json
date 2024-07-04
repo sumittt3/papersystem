@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+ "scripts": {
+    "start": "node server.js", // Example script for starting the server
+    "test": "jest",            // Example script for running tests
+    "dev": "nodemon server.js" // Example script for development with auto-reloading
   },
   "keywords": [],
   "author": "",
