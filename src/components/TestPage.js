@@ -14,6 +14,8 @@
         const [teacherUsername, setTeacherUsername] = useState('');
         const [showWarning, setShowWarning] = useState(true);
         const submitButtonRef = useRef(null);
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const submitCountRef = useRef(0); 
 
         useEffect(() => {
             console.log(uniqueCode);
@@ -87,13 +89,19 @@
             };
 
             const handleKeyDown = (event) => {
-                if (event.key === 'F5' || (event.ctrlKey && event.key === 'r') || (event.metaKey && event.key === 'r')|| (event.ctrlKey && event.key.toLowerCase() === 'tab')) {
                     event.preventDefault();
                     event.stopPropagation();
+                    event.cancelBubble=true;
                     return false;
-                }
+                
             };
 
+            const handleWindowBlur = () => {
+                // When the window loses focus, submit the test
+                if (submitButtonRef.current) {
+                    submitButtonRef.current.click(); // Auto-submit the test
+                }
+            };
             const handleContextMenu = (event) => {
                 event.preventDefault();
             };
@@ -104,6 +112,7 @@
             document.addEventListener('msfullscreenchange', handleFullscreenChange);
             window.addEventListener('beforeunload', handleBeforeUnload);
             window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('blur', handleWindowBlur);
             window.addEventListener('contextmenu', handleContextMenu);
 
             return () => {
@@ -113,6 +122,7 @@
                 document.removeEventListener('msfullscreenchange', handleFullscreenChange);
                 window.removeEventListener('beforeunload', handleBeforeUnload);
                 window.removeEventListener('keydown', handleKeyDown);
+                window.removeEventListener('blur', handleWindowBlur);
                 window.removeEventListener('contextmenu', handleContextMenu);
             };
         }, [location.state, navigate]);
@@ -179,6 +189,12 @@
             setCurrentQuestionIndex(prevIndex => prevIndex - 1);
         };
         const handleSubmit = async () => {
+              if (isSubmitting || submitCountRef.current > 0) {
+            return; // Prevent multiple submissions
+        }
+
+        setIsSubmitting(true); // Set submission in progress
+        submitCountRef.current += 1;
             try {
             const answersToSubmit = paperDetails.questions.map((question, index) => {
                 const selectedOption = selectedAnswers[index] || 'none';
@@ -254,18 +270,19 @@
         const totalQuestions = paperDetails.questions.length;
         const isFirstQuestion = currentQuestionIndex === 0;
         const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
-
+        const paperName = paperDetails.paperName.split('_')[0];
         return (
             <div className="min-h-screen bg-gray-500 p-8 w-screen">
                 <div className="container mx-auto max-w-3xl">
-                    <h2 className="text-5xl font-bold mb-6 text-center font-serif text-white">{paperDetails.paperName}</h2>
+                    <h2 className="text-5xl font-bold mb-6 text-center font-serif text-white">{paperName}</h2>
                     <p className="text-2xl mb-6 text-end font-mono text-white">Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</p>
                     {showWarning && (
                         <div className="mb-6 bg-yellow-200 text-yellow-800 p-4 rounded-lg">
-                            <p className="text-lg">Warning: Pressing ESC will submit the test. Do not press ESC again unless you want to submit.</p>
+                            <p className="text-lg"> Warning: Pressing ESC will submit the test. Do not press ESC again unless you want to submit.
+                            Additionally, switching to another window or application will also submit the test.</p>
                         </div>
                     )}
-                    <div className="text-lg text-center mb-4">
+                    <div className="text-lg text-center mb-4 text-white">
                     Question {currentQuestionIndex + 1} / {totalQuestions}
                 </div>
                     <div className="mb-6">
@@ -273,13 +290,13 @@
                         {options.map((option, index) => (
                             <div
                                 key={index}
-                                className={`bg-white p-4 rounded-lg cursor-pointer mb-4 ${selectedAnswers[currentQuestionIndex] === option
-                                        ?  'text-green-300 bg-red-600'
+                                className={`bg-white p-4 rounded-lg cursor-pointer mb-4 ${selectedAnswers[currentQuestionIndex] == option
+                                        ? 'text-green-300 bg-red-900'
                                         : 'hover:bg-lime-300'
                                     }`}
                                 onClick={() => handleAnswerSelect(currentQuestionIndex, option)}
                             >
-                                <span className="text-lg font-medium">
+                                <span className="text-xl font-medium font-sans font-extrabold">
                                     {String.fromCharCode(65 + index)}: {option}
                                 </span>
                             </div>

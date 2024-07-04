@@ -62,7 +62,7 @@ const FileUploadComp = ({ username }) => {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('paperName', paperName);
+            formData.append('paperName', `${paperName}_${username}`);
             formData.append('username', username); // Append username to FormData
 
             const response = await fetch('http://localhost:3001/uploadfile', {

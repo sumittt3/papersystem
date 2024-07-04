@@ -119,17 +119,14 @@ const TestPageEntrance = ({ setShowNavButtons }) => {
 
     // Function to handle before unload event
     const handleBeforeUnload = (event) => {
-        const confirmationMessage = 'Are you sure you want to leave? Your progress will be lost.';
-        event.returnValue = confirmationMessage; // Standard for most browsers
-        return confirmationMessage; // Required for Safari
     };
 
     // Function to handle keydown event to prevent refreshing (F5, Ctrl+R, Cmd+R)
     const handleKeyDown = (event) => {
-        if (event.key === 'F5' || (event.ctrlKey && event.key === 'r') || (event.metaKey && event.key === 'r')) {
             event.preventDefault();
             event.stopPropagation();
-        }
+            event.cancelBubble=true;
+            return false;
     };
 
     // Function to handle context menu event
@@ -163,11 +160,11 @@ const TestPageEntrance = ({ setShowNavButtons }) => {
     // Calculate total questions and total time
     const totalQuestions = paperDetails.questions.length;
     const totalTime = totalQuestions * 30; // Total time in seconds
-
+    const paperName = paperDetails.paperName.split('_')[0];
     // Render test page entrance
     return (
         <div className="min-h-screen bg-slate-800 flex flex-col justify-center items-center w-screen">
-            <h2 className="text-4xl font-bold mb-4 text-center text-white font-serif">Online Test: {paperDetails.paperName}</h2>
+            <h2 className="text-4xl font-bold mb-4 text-center text-white font-serif">Online Test: {paperName}</h2>
             <div className="container mx-auto mt-8 bg-gray-100 p-6 rounded-lg shadow-xl">
                 <div className="flex justify-between items-center mb-4">
                     <p className="text-lg font-bold">Teacher: {paperDetails.teacherUsername}</p>
