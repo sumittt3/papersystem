@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams,useLocation } from 'react-router-dom';
 
 const TestCollection = ({ setShowNavButtons }) => {
     const [testCollections, setTestCollections] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const location = useLocation(); 
     const { username } = useParams();
+    const params = new URLSearchParams(location.search);
+    const email = params.get('email');
 
     useEffect(() => {
         const fetchTestCollections = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/api/student/test-collections`);
+                const response = await axios.post(`http://localhost:3001/api/student/test-collections`);
                 if (response.data && response.data.collections) {
                     setTestCollections(response.data.collections);
                 } else {
@@ -47,9 +50,9 @@ const TestCollection = ({ setShowNavButtons }) => {
                         </span>
                     </div>
                     <div className="flex flex-row gap-6 mt-0">
-                        <a href={`/StudentDashboard/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
-                        <a href={`/Profile2/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
-                        <a href={`/TestCollection/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
+                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
+                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
+                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
                     </div>
                 </div>
 

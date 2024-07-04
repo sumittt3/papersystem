@@ -10,6 +10,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
     const navigate = useNavigate();
     const [topStudents, setTopStudents] = useState([]);
     const [studentTests, setStudentTests] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchPapers = async () => {
@@ -38,8 +39,8 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
         const fetchStudentTests = async () => {
             try {
                 const response = await axios.post(`http://localhost:3001/api/studenttestinfo`, {
-                        username: username // Send the username to match in student tests
-                    });
+                    username: username // Send the username to match in student tests
+                });
                 console.log(response.data);
                 setStudentTests(response.data); // Assuming your backend sends an array of student tests
                 const updatedStudentTests = response.data.map(test => ({
@@ -47,7 +48,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                     percentage: ((test.score / test.totalQuestions) * 100).toFixed(2) // Calculate percentage and round to 2 decimal places
                 }));
                 const sortedByScore = [...updatedStudentTests].sort((a, b) => b.score - a.score);
-                setTopStudents(sortedByScore.slice(0, 3)); 
+                setTopStudents(sortedByScore.slice(0, 3));
             } catch (error) {
                 console.error('Error fetching student tests:', error);
             }
@@ -67,6 +68,12 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
         sessionStorage.clear();
         navigate('/');
     };
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+    const filteredTests = studentTests.filter(test =>
+        test.uniqueCode.toLowerCase().startsWith(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="min-h-screen w-screen bg-teal-700 flex flex-col">
@@ -119,6 +126,11 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                                 <p className="text-gray-600">Percentage: {student.percentage}%</p>
                             </div>
                         ))}
+                        {topStudents.length === 0 && (
+                            <div className="bg-gray-400 rounded-lg shadow-md pt-1 m-1 mt-6 w-96 h-20 flex items-center justify-center">
+                                <p className="text-2xl text-gray-200">No top students found</p>
+                            </div>
+                        )}
                     </section>
                 </div>
                 <div className='row-span-1 col-span-2 -mt-3'>
@@ -137,7 +149,16 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                 </section></div>
             </div>
             <div className='bg-slate-50'>
-                <h2 className="text-2xl font-bold text-gray-900 mx-auto max-w-7xl px-4 py-6">Student Test Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mx-auto max-w-7xl px-1 py-3">Student Test Information</h2>
+                <div className="px-6">
+                    <input
+                        type="text"
+                        placeholder="Search by Unique Code"
+                        className="border rounded px-4 py-2 w-96"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                    />
+                </div>
                 <div className="overflow-x-auto">
                     <table className="w-screen mx-auto divide-y divide-gray-200">
                         <thead className="bg-gray-50">
@@ -152,17 +173,23 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {studentTests.map((test, index) => (
-                                <tr key={index}>
-                                    <td className="px-10 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
-                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.studentUsername}</td>
-                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.testName}</td>
-                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.score}/{test.totalQuestions}</td>
-                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(test.testDate).toLocaleDateString()}</td>
-                                    <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.uniqueCode}</td>
-
+                            {/* Conditionally render no data message */}
+                            {filteredTests.length === 0 ? (
+                                <tr>
+                                    <td className="px-10 py-4 whitespace-nowrap text-sm font-medium text-gray-900" colSpan="6" >No data available</td>
                                 </tr>
-                            ))}
+                            ) : (
+                                filteredTests.map((test, index) => (
+                                    <tr key={index}>
+                                        <td className="px-10 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.studentUsername}</td>
+                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.testName}</td>
+                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.score}/{test.totalQuestions}</td>
+                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(test.testDate).toLocaleDateString()}</td>
+                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500">{test.uniqueCode}</td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>

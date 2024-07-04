@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams,useLocation } from 'react-router-dom';
 
 const Profile2 = ({ setShowNavButtons }) => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -9,7 +9,11 @@ const Profile2 = ({ setShowNavButtons }) => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
+    const location = useLocation(); 
+
     const { username } = useParams();
+    const params = new URLSearchParams(location.search);
+    const email = params.get('email');
 
     // Function to handle password change
     const handleChangePassword = async (event) => {
@@ -62,9 +66,9 @@ const Profile2 = ({ setShowNavButtons }) => {
                         </span>
                     </div>
                     <div className="flex flex-row gap-6 mt-0">
-                        <a href={`/StudentDashboard/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
-                        <a href={`/Profile2/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
-                        <a href={`/TestCollection/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
+                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
+                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
+                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
                     </div>
                 </div>
 

@@ -9,13 +9,16 @@ const TestPageEntrance = ({ setShowNavButtons }) => {
     const [uniqueCode, setUniqueCode] = useState('');
     const [teacherUsername, setTeacherUsername] = useState('');
 
+    useEffect(() => {
+        console.log("code is :",uniqueCode);
+    }, [uniqueCode])
     // Effect to prevent navigation away from the test page
     useEffect(() => {
         const disableBackNavigation = () => {
             window.history.pushState(null, '', window.location.href);
             window.history.replaceState(null, '', window.location.href);
             window.onpopstate = () => {
-                window.history.pushState(null, '', window.location.href);
+                navigate('/student-login'); // Navigate to student-login on back navigation
             };
         };
 

@@ -1,31 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import PaperGen from './PaperGen'; // Adjust the path as necessary
 
+
 const StudentDashboard = ({ setShowNavButtons }) => {
     const [papers, setPapers] = useState([]);
-    const [totalTests, setTotalTests] = useState(0);
-    const [totalStudents, setTotalStudents] = useState(0);
     const { username } = useParams();
+    const location = useLocation(); 
+    const params = new URLSearchParams(location.search);
+    const email = params.get('email');
     const navigate = useNavigate();
-    const [topStudents, setTopStudents] = useState([]);
-
-    useEffect(() => {
-        const fetchPapers = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3001/api/papers/count`, {
-                    params: {
-                        username: username // Assuming 'username' is defined somewhere in your component
-                    }
-                });
-                setTotalTests(response.data.count); // Assuming your backend sends the count as { count: <number> }
-            } catch (error) {
-                console.error('Error fetching papers:', error);
-            }
-        };
-        fetchPapers();
-    }, [username]);
 
     useEffect(() => {
         setShowNavButtons(false);
@@ -48,9 +33,9 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                         </span>
                     </div>
                     <div className="flex flex-row gap-6 mt-0">
-                        <a href={`/StudentDashboard/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
-                        <a href={`/Profile2/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
-                        <a href={`/TestCollection/${username}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
+                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
+                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
+                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
                     </div>
                 </div>
 
@@ -81,7 +66,7 @@ const StudentDashboard = ({ setShowNavButtons }) => {
 
                 {/* Render PaperGen Component */}
                 <div className="flex justify-center place-content-center mt-20">
-                    <PaperGen username={username} />
+                    <PaperGen username={username} email={email} />
                 </div>
             </div>
         </div>

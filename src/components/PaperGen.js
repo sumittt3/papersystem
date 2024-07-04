@@ -2,26 +2,40 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function PaperGen({username: initialUsername }) {
+function PaperGen({ username: initialUsername, email:initialEmail }) {
     const navigate = useNavigate();
     const [uniqueCode, setUniqueCode] = useState('');
+    const [registeredCode, setRegisteredCode] = useState(''); // State for registered code
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showTestButton, setShowTestButton] = useState(false);
     const [paperDetails, setPaperDetails] = useState({});
     const [username, setUsername] = useState(initialUsername);
+    const [email,setEmail]=useState(initialEmail);
 
+    useEffect(() => {
+        console.log("unique code is:",uniqueCode);
+    }, [uniqueCode])
     useEffect(() => {
         setUsername(initialUsername);
     }, [initialUsername]);
+    useEffect(() => {
+        setEmail(initialEmail);
+    }, [initialEmail]);
+    useEffect(() => {
+        console.log('Email changed:', email);
+    }, [email]);
 
+    useEffect(() => {
+        console.log('Username changed:', username);
+    }, [username]);
     const handleInputChange = (event) => {
         setUniqueCode(event.target.value);
     };
 
     const handleSubmit = async () => {
-        if (uniqueCode.trim() === '') {
-            setError('Code cannot be empty');
+        if (uniqueCode.trim() === '' || registeredCode.trim() === '') { // Check both codes
+            setError('Codes cannot be empty');
             setTimeout(() => setError(''), 3000); // Clear error after 3 seconds
             return;
         }
@@ -29,7 +43,12 @@ function PaperGen({username: initialUsername }) {
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://localhost:3001/api/check-code`, { uniqueCode,username });
+            const response = await axios.post(`http://localhost:3001/api/check-code`, {
+                uniqueCode,
+                registeredCode, // Include registered code in the request
+                username, // Optionally include username if needed
+                email
+            });
 
             if (response.status === 200) {
                 setPaperDetails({
@@ -62,33 +81,45 @@ function PaperGen({username: initialUsername }) {
 
     useEffect(() => {
         console.log('Paper details updated:', paperDetails); // Log paperDetails when it updates
-        console.log({username});
+        console.log({ username });
+        console.log(uniqueCode);
+
     }, [paperDetails]);
 
     const handleClear = () => {
-        setUniqueCode('');
         setError('');
         setShowTestButton(false);
         setPaperDetails({});
+        setUniqueCode('');
+        setRegisteredCode('');
     };
 
     const handleTestButtonClick = () => {
         console.log('Test button clicked!');
         console.log(paperDetails);
+        console.log(uniqueCode);
+        console.log(username);
 
         // Navigate to '/TestPageEntrance' with paperDetails as state
-        navigate('/TestPageEntrance', { state: { paperDetails,uniqueCode,username } });
+        navigate('/TestPageEntrance', { state: { paperDetails, uniqueCode, username } });
     };
 
     return (
         <div className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-xl w-96">
-            <h1 className="text-2xl font-bold text-gray-700 mb-4">Enter Unique Code</h1>
+            <h1 className="text-2xl font-bold text-gray-700 mb-4">Enter Codes</h1>
             <input
                 type="text"
                 value={uniqueCode}
                 onChange={handleInputChange}
                 className="px-4 py-2 border border-gray-300 rounded-md shadow-md w-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Code"
+                placeholder="Unique Code"
+            />
+            <input
+                type="text"
+                value={registeredCode}
+                onChange={(e) => setRegisteredCode(e.target.value)}
+                className="mt-2 px-4 py-2 border border-gray-300 rounded-md shadow-md w-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Registered Code"
             />
             {error && <p className="text-red-500 mt-2">{error}</p>}
             {showTestButton && (
