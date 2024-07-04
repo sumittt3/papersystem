@@ -296,7 +296,7 @@
                                     }`}
                                 onClick={() => handleAnswerSelect(currentQuestionIndex, option)}
                             >
-                                <span className="text-xl font-medium font-sans font-extrabold">
+                                <span className="text-xl font-sans font-extrabold">
                                     {String.fromCharCode(65 + index)}: {option}
                                 </span>
                             </div>
