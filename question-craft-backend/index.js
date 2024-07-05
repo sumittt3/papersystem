@@ -539,12 +539,9 @@ app.get('/api/papers/count', async (req, res) => {
       return res.status(400).json({ error: 'Username parameter is required' });
     }
 
-    // Connect to MongoDB
-    await mongoose.connect(mongoURI, {
+  const client = new MongoClient(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
     });
 
     await client.connect();
