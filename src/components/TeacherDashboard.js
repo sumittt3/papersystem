@@ -15,7 +15,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
     useEffect(() => {
         const fetchPapers = async () => {
             try {
-                const response = await axios.get(`https://papersystem.onrender.com/api/papers/count`, {
+                const response = await axios.get('https://papersystem.onrender.com/api/papers/count', {
                     params: {
                         username: username // Assuming 'username' is defined somewhere in your component
                     }
@@ -28,7 +28,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
 
         const fetchTotalStudents = async () => {
             try {
-                const response = await axios.post(`https://papersystem.onrender.com/api/students/countno`, {
+                const response = await axios.post('https://papersystem.onrender.com/api/students/countno', {
                     username: username // Assuming 'username' is defined somewhere in your component
                 });
                 setTotalStudents(response.data.count); // Assuming your backend sends the count as { count: <number> }
@@ -38,7 +38,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
         };
         const fetchStudentTests = async () => {
             try {
-                const response = await axios.post(`https://papersystem.onrender.com/api/studenttestinfo`, {
+                const response = await axios.post('https://papersystem.onrender.com/api/studenttestinfo', {
                     username: username // Send the username to match in student tests
                 });
                 console.log(response.data);
