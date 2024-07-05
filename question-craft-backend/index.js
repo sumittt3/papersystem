@@ -827,17 +827,18 @@ app.post('/api/studenttestinfo', async (req, res) => {
       return res.status(404).json({ error: 'Username parameter is required' });
     }
 
-    // Ensure to establish MongoDB connection before querying
-    await mongoose.connect(mongoURI, {
+   const client = new MongoClient(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
     });
 
-    // Fetch student tests based on teacherUsername matching username
-    const studentTests = await StudentTest.find({ teacherUsername: username });
+    // Connect to MongoDB using the MongoClient
+    await client.connect();
 
+    // Access the 'Question' database and the 'studentTests' collection
+    const db = client.db('Question');
+    const studentTestsCollection = db.collection('studentTests')
+    const studentTests = await studentTestsCollection.find({ teacherUsername: username }).toArray();
     // Format the fetched data for response
     const formattedStudentTests = studentTests.map(test => ({
       studentUsername: test.studentUsername,
