@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams,useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const TestCollection = ({ setShowNavButtons }) => {
     const [testCollections, setTestCollections] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const location = useLocation(); 
+    const location = useLocation();
     const { username } = useParams();
     const params = new URLSearchParams(location.search);
     const email = params.get('email');
@@ -39,7 +39,6 @@ const TestCollection = ({ setShowNavButtons }) => {
         sessionStorage.clear();
         navigate('/');
     };
-
     return (
         <div className="min-h-screen w-screen bg-teal-800 flex flex-col">
             <div className="bg-gray-800 text-white flex justify-between items-center px-6 py-4 shadow-lg">
@@ -90,14 +89,19 @@ const TestCollection = ({ setShowNavButtons }) => {
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {testCollections.length > 0 ? (
-                                testCollections.map((collection, index) => (
-                                    <tr key={index}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{collection.paperName}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{collection.teacherUsername}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{collection.totalQuestions}</td>
-                                    </tr>
-                                ))
+                                testCollections.map((collection, index) => {
+                                    // Split the paperName to get only the papername part
+                                    const paperName = collection.paperName.split('_')[0];
+
+                                    return (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{paperName}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{collection.teacherUsername}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{collection.totalQuestions}</td>
+                                        </tr>
+                                    );
+                                })
                             ) : (
                                 <tr>
                                     <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No test collections found.</td>
