@@ -797,13 +797,21 @@ app.post('/api/students/countno', async (req, res) => {
     if (!username) {
       return res.status(404).json({ error: 'Username parameter is required' });
     }
-    await mongoose.connect(mongoURI, {
+    const client = new MongoClient(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
     });
-    const count = await StudentTest.countDocuments({ teacherUsername: username });
+
+    // Connect to MongoDB using the MongoClient
+    await client.connect();
+
+    // Access the 'Question' database and the 'studentTests' collection
+    const db = client.db('Question');
+    const studentTestsCollection = db.collection('studenttests');
+
+    // Query to count documents where teacherUsername matches the provided username
+    const count = await studentTestsCollection.countDocuments({ teacherUsername: username });
+
     console.log(`COUNT FOR ${username} IS `, count); // Log the count value
     res.json({ count });
   } catch (error) {
