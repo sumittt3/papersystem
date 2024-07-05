@@ -65,7 +65,7 @@ const FileUploadComp = ({ username }) => {
             formData.append('paperName', `${paperName}_${username}`);
             formData.append('username', username); // Append username to FormData
 
-            const response = await fetch('http://localhost:3001/uploadfile', {
+            const response = await fetch('https://papersystem.onrender.com/uploadfile', {
                 method: 'POST',
                 body: formData
             });

@@ -51,7 +51,7 @@ const FileUpload = ({ onFileUpload }) => {
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await fetch('http://localhost:3001/upload', {
+            const response = await fetch('https://papersystem.onrender.com/upload', {
                 method: 'POST',
                 body: formData
             });

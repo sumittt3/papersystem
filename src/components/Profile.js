@@ -16,7 +16,7 @@ const Profile = ({ setShowNavButtons }) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3001/api/teacher/change-password', {
+            const response = await axios.post('https://papersystem.onrender.com/api/teacher/change-password', {
                 username,
                 currentPassword,
                 newPassword,

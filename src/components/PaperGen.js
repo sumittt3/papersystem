@@ -43,7 +43,7 @@ function PaperGen({ username: initialUsername, email:initialEmail }) {
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://localhost:3001/api/check-code`, {
+            const response = await axios.post(`https://papersystem.onrender.com/api/check-code`, {
                 uniqueCode,
                 registeredCode, // Include registered code in the request
                 username, // Optionally include username if needed

@@ -15,7 +15,7 @@ const TeacherLoginPage = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/api/login', { username, password });
+      const response = await axios.post('https://papersystem.onrender.com/api/login', { username, password });
       console.log('Login response:', response.data); // Log successful login message
 
       // Assuming your server returns a token upon successful login
@@ -46,7 +46,7 @@ const TeacherLoginPage = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/api/signup', { username, email, password });
+      const response = await axios.post('https://papersystem.onrender.com/api/signup', { username, email, password });
       console.log('Signup response:', response.data); // Log successful signup message
       alert('Account created successfully!');
       // Clear form fields after account creation

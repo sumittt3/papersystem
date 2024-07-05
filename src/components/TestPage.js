@@ -223,7 +223,7 @@
                 uniqueCode: uniqueCode,
                 teacherUsername: teacherUsername
             };    
-                const response = await axios.post('http://localhost:3001/api/studentTests', studentTest);
+                const response = await axios.post('https://papersystem.onrender.com/api/studentTests', studentTest);
                 console.log('Test data saved:', response.data);
                 alert('Test submitted successfully!');
                 console.log(selectedAnswers);

@@ -14,7 +14,7 @@ const TestCollection = ({ setShowNavButtons }) => {
     useEffect(() => {
         const fetchTestCollections = async () => {
             try {
-                const response = await axios.post(`http://localhost:3001/api/student/test-collections`);
+                const response = await axios.post(`https://papersystem.onrender.com/api/student/test-collections`);
                 if (response.data && response.data.collections) {
                     setTestCollections(response.data.collections);
                 } else {

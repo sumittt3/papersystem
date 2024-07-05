@@ -20,7 +20,7 @@ const StudentLoginPage = () => {
       console.log(username);
       console.log(password);
       console.log(email);
-      const response = await axios.post('http://localhost:3001/api/student/login', { username, password, email });
+      const response = await axios.post('https://papersystem.onrender.com/api/student/login', { username, password, email });
       console.log('Login response:', response.data);
 
       const token = response.data.token;
@@ -51,7 +51,7 @@ const StudentLoginPage = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/api/student/signup', { username, email, password, paperName });
+      const response = await axios.post('https://papersystem.onrender.com/api/student/signup', { username, email, password, paperName });
       console.log('Signup response:', response.data);
       const generatedCode = response.data.uniqueCode;
       setUniqueCode(generatedCode);
