@@ -547,10 +547,15 @@ app.get('/api/papers/count', async (req, res) => {
       socketTimeoutMS: 45000,
     });
 
-    // Query to count papers where teacherUsername matches the provided username
-    const count = await Paper.countDocuments({ teacherUsername: username });
-    console.log(`COUNT VALUE FOR ${username} IS `, count); // Log the count value
+    await client.connect();
 
+    // Access the database and collection
+    const db = client.db('Question');
+    const papersCollection = db.collection('papers');
+
+    // Query to count papers where teacherUsername matches the provided username
+    const count = await papersCollection.countDocuments({ teacherUsername: username });
+    console.log(`COUNT VALUE FOR ${username} IS `, count); // Log the count value
     // Send response with count
     res.json({ count });
   } catch (error) {
