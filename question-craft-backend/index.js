@@ -837,7 +837,7 @@ app.post('/api/studenttestinfo', async (req, res) => {
 
     // Access the 'Question' database and the 'studentTests' collection
     const db = client.db('Question');
-    const studentTestsCollection = db.collection('studentTests')
+    const studentTestsCollection = db.collection('studenttests')
     const studentTests = await studentTestsCollection.find({ teacherUsername: username }).toArray();
     // Format the fetched data for response
     const formattedStudentTests = studentTests.map(test => ({
