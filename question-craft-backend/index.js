@@ -23,7 +23,7 @@ const mongoURI = process.env.MONGO_URI;
 
 // Apply CORS middleware to allow requests from localhost:3000
 app.use(cors({
-  origin: 'https://papersystem.onrender.com'
+  origin: 'https://papersystem.vercel.app'
 }));
 
 // Retry logic for transient errors
