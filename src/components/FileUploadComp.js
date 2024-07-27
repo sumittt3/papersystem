@@ -47,7 +47,7 @@ const FileUploadComp = ({ username }) => {
 
     const checkDuplicatePaperName = async (name) => {
         try {
-            const response = await fetch(`hhttps://papersystem.onrender.com/checkPaperName?paperName=${encodeURIComponent(name)}`);
+            const response = await fetch(`https://papersystem.onrender.com/checkPaperName?paperName=${encodeURIComponent(name)}`);
             const data = await response.json();
             return data.exists; // Assuming the response contains an 'exists' field indicating duplication
         } catch (error) {
