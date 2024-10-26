@@ -120,13 +120,60 @@ const Profile2 = ({ setShowNavButtons }) => {
                 </div>
             </div>
 
-            <div className="flex-grow flex items-center justify-center">
-                <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                    <h1 className="text-2xl font-bold mb-4">Profile</h1>
-                    <p className="text-gray-600 mb-2">Username: <span className="font-semibold">{username}</span></p>
-                    <p className="text-gray-600 mb-2">Email: <span className="font-semibold">{email}</span></p>
-                    {/* Additional profile information can be added here */}
-                </div>
+          {/* Profile Content */}
+            <div className="container mx-auto px-4 py-8">
+                <h2 className="text-3xl font-bold mb-4 text-white">Change Password</h2>
+                {error && <div className="text-red-500 mb-4">{error}</div>}
+                {successMessage && <div className="text-green-500 mb-4">{successMessage}</div>}
+
+                {/* Password Change Form */}
+                <form onSubmit={handleChangePassword}>
+                    <div className="mb-4">
+                        <label htmlFor="currentPassword" className="block text-sm font-medium text-white">
+                            Current Password
+                        </label>
+                        <input
+                            type="password"
+                            id="currentPassword"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-white">
+                            New Password
+                        </label>
+                        <input
+                            type="password"
+                            id="newPassword"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">
+                            Confirm New Password
+                        </label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="inline-block bg-slate-900 hover:bg-blue-200 hover:text-black text-white px-4 py-2 font-semibold rounded-md transition duration-300"
+                    >
+                        Change Password
+                    </button>
+                </form>
             </div>
         </div>
     );
