@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams,useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const Profile2 = ({ setShowNavButtons }) => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -8,8 +8,9 @@ const Profile2 = ({ setShowNavButtons }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [isOpen, setIsOpen] = useState(false); // State to handle the mobile menu
     const navigate = useNavigate();
-    const location = useLocation(); 
+    const location = useLocation();
 
     const { username } = useParams();
     const params = new URLSearchParams(location.search);
@@ -58,21 +59,36 @@ const Profile2 = ({ setShowNavButtons }) => {
     return (
         <div className="min-h-screen w-screen bg-teal-800 flex flex-col">
             <div className="bg-gray-800 text-white flex justify-between items-center px-6 py-4 shadow-lg">
-                {/* Left Side: Logo and Navigation Links */}
+                {/* Logo and Hamburger Menu */}
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2 bg-gradient-to-r from-blue-300 to-green-300 p-2 rounded-lg shadow-lg">
                         <span className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
                             Question <span className="text-green-700">Craft</span>
                         </span>
                     </div>
-                    <div className="flex flex-row gap-6 mt-0">
-                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
-                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
-                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
-                    </div>
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="md:hidden text-white focus:outline-none"
+                    >
+                        <svg
+                            className="w-6 h-6"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+                        </svg>
+                    </button>
                 </div>
 
-                {/* Right Side: User Info and Logout */}
+                {/* Navigation Links */}
+                <div className={`md:flex ${isOpen ? 'block' : 'hidden'} flex-col md:flex-row gap-6 mt-4 md:mt-0`}>
+                    <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
+                    <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
+                    <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
+                </div>
+
+                {/* User Info and Logout */}
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2 group">
                         <svg className="w-6 h-6 text-white group-hover:text-gray-200 transition duration-300" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
