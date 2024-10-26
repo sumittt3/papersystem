@@ -136,26 +136,32 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                     </button>
                 </div>
 
-                {/* Dropdown Menu for mobile screens */}
-                <div className="sm:hidden relative">
-                    <button
-                        onClick={toggleDropdown}
-                        className="bg-gray-800 text-white p-2 rounded-lg focus:outline-none"
-                    >
-                            
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
-        </svg>
+                {/* Dropdown for smaller screens */}
+                <div className="sm:hidden">
+                    <button onClick={toggleDropdown} className="text-white flex items-center">
+                        Menu
+                        <svg className={`w-4 h-4 ml-1 transition-transform duration-300 ${dropdownOpen ? 'transform rotate-90' : ''}`} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 10l5 5 5-5H7z" />
+                        </svg>
                     </button>
                     {dropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
-                            <a href={`/TeacherDashboard/${username}`} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Dashboard</a>
-                            <a href={`/Profile/${username}`} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Change Password</a>
-                            <a href={`/Test/${username}`} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Create Test</a>
+                        <div className="absolute bg-gray-800 mt-2 rounded-lg shadow-lg p-4">
+                            <a href={`/TeacherDashboard/${username}`} className="block text-white hover:text-gray-200 transition duration-300 text-lg font-bold">
+                                Dashboard
+                            </a>
+                            <a href={`/Profile/${username}`} className="block text-white hover:text-gray-200 transition duration-300 text-lg font-bold">
+                                Change Password
+                            </a>
+                            <a href={`/Test/${username}`} className="block text-white hover:text-gray-200 transition duration-300 text-lg font-bold">
+                                Create Test
+                            </a>
                             <button
+                                className="flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 shadow-md mt-2 w-full"
                                 onClick={handleLogout}
-                                className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
                             >
+                                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 13v-2h-8v2h8zm-6-6h-2v12h2v-12zm8-4v16h-12v-16h12zm0-2h-12c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-16c0-1.1-.9-2-2-2z" />
+                                </svg>
                                 Logout
                             </button>
                         </div>
@@ -163,167 +169,75 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                 </div>
             </div>
 
-          {/* Dashboard Content */}
-<div className="flex-grow flex flex-col items-center py-6 px-4 sm:px-8">
-    {/* Mobile View */}
-    <div className="block sm:hidden">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 w-full">
-            <h1 className="text-2xl font-bold mb-4">Teacher Dashboard</h1>
-            <div className="flex justify-between mb-4">
-                <div className="bg-teal-200 text-teal-700 p-4 rounded-lg shadow-md flex-1 mr-4">
-                    <h2 className="text-lg font-semibold">Total Tests Generated</h2>
-                    <p className="text-2xl">{totalTests}</p>
+            <div className="flex flex-col md:flex-row flex-grow p-4 gap-4">
+                <div className='bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center w-full'>
+                    <h2 className='text-3xl font-bold mb-4'>Dashboard Overview</h2>
+                    <div className='flex justify-around w-full'>
+                        <div className='bg-blue-200 rounded-lg p-4 flex flex-col items-center'>
+                            <h3 className='text-2xl font-bold'>{totalTests}</h3>
+                            <p className='text-lg'>Total Tests Created</p>
+                        </div>
+                        <div className='bg-green-200 rounded-lg p-4 flex flex-col items-center'>
+                            <h3 className='text-2xl font-bold'>{totalStudents}</h3>
+                            <p className='text-lg'>Total Students</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="bg-teal-200 text-teal-700 p-4 rounded-lg shadow-md flex-1">
-                    <h2 className="text-lg font-semibold">Total Students</h2>
-                    <p className="text-2xl">{totalStudents}</p>
+
+                <div className='bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center w-full'>
+                    <h2 className='text-3xl font-bold mb-4'>Top Students</h2>
+                    {topStudents.map((student, index) => (
+                        <div key={index} className="flex justify-between items-center bg-white rounded-lg shadow-md p-4 my-2 w-full">
+                            <span className="text-lg font-semibold">{student.studentUsername}</span>
+                            <span className="text-xl font-bold text-teal-700">{student.score}/{student.totalQuestions}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
-        </div>
 
-        {/* Top Students Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 w-full">
-            <h2 className="text-xl font-bold mb-4">Top Students</h2>
-            <ul className="list-disc list-inside">
-                {topStudents.map((student, index) => (
-                    <li key={index} className="mb-2">
-                        {student.studentUsername} - Score: {student.score}/{student.totalQuestions}
-                    </li>
-                ))}
-            </ul>
-        </div>
-
-        {/* Student Test Info Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 w-full">
-            <h2 className="text-xl font-bold mb-4">Student Test Information</h2>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                placeholder="Search by Unique Code"
-                className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
-            />
-            <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse border border-gray-200">
-                    <thead>
-                        <tr>
-                            <th className="border border-gray-200 px-10 py-4 text-left">#</th>
-                            <th className="border border-gray-200 px-5 py-4 text-left">Username</th>
-                            <th className="border border-gray-200 px-5 py-4 text-left">Score</th>
-                            <th className="border border-gray-200 px-5 py-4 text-left">Date</th>
-                            <th className="border border-gray-200 px-5 py-4 text-left">Unique Code</th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredTests.length > 0 ? (
-                            filteredTests.map((test, index) => (
-                                <tr key={test._id} className="hover:bg-gray-100">
-                                    <td className="px-10 py-4 text-sm text-gray-900">{index + 1}</td>
-                                    <td className="px-5 py-4 text-sm text-gray-900">{test.studentUsername}</td>
-                                    <td className="px-5 py-4 text-sm text-gray-900">{test.score}/{test.totalQuestions}</td>
-                                    <td className="px-5 py-4 text-sm text-gray-900">{new Date(test.testDate).toLocaleDateString()}</td>
-                                    <td className="px-5 py-4 text-sm text-gray-900">{test.uniqueCode}</td>
-                                </tr>
-                            ))
-                        ) : (
+            <div className='col-span-2 row-span-2 bg-white rounded-lg shadow-md p-4'>
+                <h2 className='text-3xl font-bold mb-4'>Student Test Information</h2>
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder="Search by Unique Code"
+                    className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+                />
+                <div className="overflow-x-auto">
+                    <table className="min-w-full border-collapse border border-gray-200">
+                        <thead>
                             <tr>
-                                <td colSpan="6" className="text-center px-10 py-4 text-sm text-gray-500">No tests found for the search criteria.</td>
+                                <th className="border border-gray-200 px-10 py-4 text-left">#</th>
+                                <th className="border border-gray-200 px-5 py-4 text-left">Username</th>
+                                <th className="border border-gray-200 px-5 py-4 text-left">Score</th>
+                                <th className="border border-gray-200 px-5 py-4 text-left">Date</th>
+                                <th className="border border-gray-200 px-5 py-4 text-left">Unique Code</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {filteredTests.length > 0 ? (
+                                filteredTests.map((test, index) => (
+                                    <tr key={test._id} className="hover:bg-gray-100">
+                                        <td className="px-10 py-4 text-sm text-gray-900">{index + 1}</td>
+                                        <td className="px-5 py-4 text-sm text-gray-900">{test.studentUsername}</td>
+                                        <td className="px-5 py-4 text-sm text-gray-900">{test.score}/{test.totalQuestions}</td>
+                                        <td className="px-5 py-4 text-sm text-gray-900">{new Date(test.testDate).toLocaleDateString()}</td>
+                                        <td className="px-5 py-4 text-sm text-gray-900">{test.uniqueCode}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="text-center px-10 py-4 text-sm text-gray-500">No tests found for the search criteria.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-
-    {/* Larger Device View */}
-    <div className="hidden sm:grid grid-cols-4 grid-rows-3 gap-x-28 text-white p-4 pt-6">
-        <div className='col-span-2 row-span-1'>
-            <h1 className="text-5xl font-serif font-bold text-white outline-white pl-4 pt-3">Welcome back, {username}</h1>
-        </div>
-
-        <div className='row-span-3 col-span-2 bg-slate-700'>
-            <section id="top-performing-students" className="flex flex-wrap">
-                <h2 className='text-3xl font-bold pl-56 pt-1'>Top Students</h2>
-                {topStudents.map((student, index) => (
-                    <div key={index} className="bg-white rounded-lg shadow-md p-4 pt-0 m-1 mt-3 w-96 h-20">
-                        <h3 className="text-lg font-bold text-black">{index + 1}. {student.studentUsername}</h3>
-                        <p className="text-gray-600">Test Score: {student.score}/{student.totalQuestions}</p>
-                        <p className="text-gray-600">Percentage: {student.percentage}%</p>
-                    </div>
-                ))}
-                {topStudents.length === 0 && (
-                    <div className="bg-gray-400 rounded-lg shadow-md pt-1 m-1 mt-6 w-96 h-20 flex items-center justify-center">
-                        <p className="text-2xl text-gray-200">No top students found</p>
-                    </div>
-                )}
-            </section>
-        </div>
-
-        <div className='row-span-1 col-span-2 -mt-3'>
-            <section id="tests-generated" className="mb-8 text-center row-span-2 col-span-2">
-                <div className="bg-gray-700 rounded-full shadow-lg p-2 mx-auto flex flex-col items-center justify-center">
-                    <h2 className="text-2xl font-bold mb-2 text-white">Total Tests Created</h2>
-                    <p className="text-gray-200 text-3xl">{totalTests}</p>
-                </div>
-            </section>
-        </div>
-
-        <div className='row-span-1 col-span-2 -mt-5'>
-            <section id="students-taking-tests" className="mb-8 text-center">
-                <div className="bg-gray-700 rounded-full shadow-lg p-2 mx-auto flex flex-col items-center justify-center">
-                    <h2 className="text-2xl font-bold mb-2 text-white">Total Students Taking Tests</h2>
-                    <p className="text-gray-200 text-3xl">{totalStudents}</p>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <div className='bg-slate-50'>
-        <h2 className="text-2xl font-bold text-gray-900 mx-auto max-w-7xl px-1 py-3">Student Test Information</h2>
-        <div className="px-6">
-            <input
-                type="text"
-                placeholder="Search by Unique Code"
-                className="border rounded px-4 py-2 w-96"
-                value={searchTerm}
-                onChange={handleSearchChange}
-            />
-        </div>
-        <div className="overflow-x-auto">
-            <table className="w-screen mx-auto divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                    <tr className="text-left">
-                        <th scope="col" className="px-10 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Sr.No</th>
-                        <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                        <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Student UserName</th>
-                        <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Test</th>
-                        <th scope="col" className="px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Set Unique Code</th>
-                    </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredTests.length === 0 ? (
-                        <tr>
-                            <td colSpan="6" className="text-center py-4 text-gray-500">No tests found for the search criteria.</td>
-                        </tr>
-                    ) : (
-                        filteredTests.map((test, index) => (
-                            <tr key={test._id} className="hover:bg-gray-100">
-                                <td className="px-10 py-4 text-sm text-gray-900">{index + 1}</td>
-                                <td className="px-5 py-4 text-sm text-gray-900">{test.score}/{test.totalQuestions}</td>
-                                <td className="px-5 py-4 text-sm text-gray-900">{test.studentUsername}</td>
-                                <td className="px-5 py-4 text-sm text-gray-900">{new Date(test.testDate).toLocaleDateString()}</td>
-                                <td className="px-5 py-4 text-sm text-gray-900">{test.uniqueCode}</td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-    );
+);
 };
 
 export default TeacherDashboard;
