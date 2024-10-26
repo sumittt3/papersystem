@@ -82,7 +82,7 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                         className="flex items-center text-white hover:text-gray-200 transition duration-300"
                     >
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 16l-4-4h8z" />
+                            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
                         </svg>
                     </button>
 
