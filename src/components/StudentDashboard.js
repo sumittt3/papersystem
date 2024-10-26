@@ -39,15 +39,15 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                     {/* Navigation Links for larger screens */}
                     <div className="hidden sm:flex gap-6">
                         <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold flex items-center">
-                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l-4-4h8z" /></svg>
+                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm2 2v14h14V5H5z" /></svg>
                             Dashboard
                         </a>
                         <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold flex items-center">
-                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l-4-4h8z" /></svg>
+                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M16 4H8v4h8V4zm0 8H8v4h8v-4zm0 8H8v4h8v-4z" /></svg>
                             Change Password
                         </a>
                         <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold flex items-center">
-                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l-4-4h8z" /></svg>
+                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z" /></svg>
                             Test Collection
                         </a>
                     </div>
@@ -82,19 +82,19 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                         <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10">
                             <a href={`/StudentDashboard/${username}?email=${email}`} className="flex items-center block text-left px-4 py-2 text-white hover:bg-gray-700">
                                 <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 16l-4-4h8z" />
+                                    <path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z" />
                                 </svg>
                                 Dashboard
                             </a>
                             <a href={`/Profile2/${username}?email=${email}`} className="flex items-center block text-left px-4 py-2 text-white hover:bg-gray-700">
                                 <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 16l-4-4h8z" />
+                                    <path d="M16 4H8v4h8V4zm0 8H8v4h8v-4zm0 8H8v4h8v-4z" />
                                 </svg>
                                 Change Password
                             </a>
                             <a href={`/TestCollection/${username}?email=${email}`} className="flex items-center block text-left px-4 py-2 text-white hover:bg-gray-700">
                                 <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 16l-4-4h8z" />
+                                    <path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z" />
                                 </svg>
                                 Test Collection
                             </a>
