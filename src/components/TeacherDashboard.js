@@ -16,7 +16,7 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
     useEffect(() => {
         const fetchPapers = async () => {
             try {
-                const response = await axios.get('https://papersystem.onrender.com/api//api/papers/count', {
+                const response = await axios.get('https://papersystem.onrender.com/api/api/papers/count', {
                     params: {
                         username: username // Assuming 'username' is defined somewhere in your component
                     }
