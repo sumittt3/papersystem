@@ -35,12 +35,36 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                             Question <span className="text-green-700">Craft</span>
                         </span>
                     </div>
+
                     {/* Navigation Links for larger screens */}
                     <div className="hidden sm:flex gap-6">
-                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
-                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
-                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
+                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold flex items-center">
+                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l-4-4h8z" /></svg>
+                            Dashboard
+                        </a>
+                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold flex items-center">
+                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l-4-4h8z" /></svg>
+                            Change Password
+                        </a>
+                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold flex items-center">
+                            <svg className="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l-4-4h8z" /></svg>
+                            Test Collection
+                        </a>
                     </div>
+                </div>
+
+                {/* Username and Logout Button for larger screens */}
+                <div className="hidden sm:flex items-center gap-4">
+                    <h2 className="text-xl font-bold">{username}</h2>
+                    <button
+                        className="flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 shadow-md"
+                        onClick={handleLogout}
+                    >
+                        <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 13v-2h-8v2h8zm-6-6h-2v12h2v-12zm8-4v16h-12v-16h12zm0-2h-12c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-16c0-1.1-.9-2-2-2z" />
+                        </svg>
+                        Logout
+                    </button>
                 </div>
 
                 {/* Dropdown Menu for Mobile Devices */}
@@ -49,26 +73,38 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                         onClick={toggleDropdown}
                         className="flex items-center text-white hover:text-gray-200 transition duration-300"
                     >
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 16l-4-4h8z" />
                         </svg>
                     </button>
 
                     {dropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10">
-                            <a href={`/StudentDashboard/${username}?email=${email}`} className="block text-left px-4 py-2 text-white hover:bg-gray-700">
+                            <a href={`/StudentDashboard/${username}?email=${email}`} className="flex items-center block text-left px-4 py-2 text-white hover:bg-gray-700">
+                                <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 16l-4-4h8z" />
+                                </svg>
                                 Dashboard
                             </a>
-                            <a href={`/Profile2/${username}?email=${email}`} className="block text-left px-4 py-2 text-white hover:bg-gray-700">
+                            <a href={`/Profile2/${username}?email=${email}`} className="flex items-center block text-left px-4 py-2 text-white hover:bg-gray-700">
+                                <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 16l-4-4h8z" />
+                                </svg>
                                 Change Password
                             </a>
-                            <a href={`/TestCollection/${username}?email=${email}`} className="block text-left px-4 py-2 text-white hover:bg-gray-700">
+                            <a href={`/TestCollection/${username}?email=${email}`} className="flex items-center block text-left px-4 py-2 text-white hover:bg-gray-700">
+                                <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 16l-4-4h8z" />
+                                </svg>
                                 Test Collection
                             </a>
                             <button
-                                className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
+                                className="flex items-center block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
                                 onClick={handleLogout}
                             >
+                                <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M16 13v-2h-8v2h8zm-6-6h-2v12h2v-12zm8-4v16h-12v-16h12zm0-2h-12c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-16c0-1.1-.9-2-2-2z" />
+                                </svg>
                                 Logout
                             </button>
                         </div>
@@ -93,4 +129,3 @@ const StudentDashboard = ({ setShowNavButtons }) => {
 };
 
 export default StudentDashboard;
-
