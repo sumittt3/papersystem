@@ -123,32 +123,41 @@ const Profile2 = ({ setShowNavButtons }) => {
                         </svg>
                     </button>
                     {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
-                            <a
-                                href={`/StudentDashboard/${username}?email=${email}`}
-                                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            >
-                                Dashboard
-                            </a>
-                            <a
-                                href={`/Profile2/${username}?email=${email}`}
-                                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            >
-                                Change Password
-                            </a>
-                            <a
-                                href={`/TestCollection/${username}?email=${email}`}
-                                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            >
-                                Test Collection
-                            </a>
-                            <button
-                                onClick={handleLogout}
-                                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            >
-                                Logout
-                            </button>
-                        </div>
+        <div
+            id="mobile-dropdown"
+            className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20"
+        >
+            <a
+                href={`/StudentDashboard/${username}?email=${email}`}
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
+            >
+                Dashboard
+            </a>
+            <a
+                href={`/Profile2/${username}?email=${email}`}
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
+            >
+                Change Password
+            </a>
+            <a
+                href={`/TestCollection/${username}?email=${email}`}
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
+            >
+                Test Collection
+            </a>
+            <button
+                onClick={() => {
+                    handleLogout();
+                    setIsDropdownOpen(false); // Close dropdown on logout
+                }}
+                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+            >
+                Logout
+            </button>
+        </div>
                     )}
                 </div>
             </div>
