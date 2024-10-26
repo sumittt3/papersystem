@@ -73,7 +73,9 @@ const Profile2 = ({ setShowNavButtons }) => {
                 <h2 className="text-xl font-bold">{username}</h2>
                 <div className="relative sm:hidden">
                     <button onClick={toggleDropdown} className="text-white">
-                        &#9776; {/* Hamburger icon */}
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 16l-4-4h8z" />
+                        </svg>
                     </button>
                     {dropdownOpen && (
                         <div className="absolute right-0 bg-gray-800 text-white shadow-lg rounded-md">
