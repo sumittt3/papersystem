@@ -133,24 +133,43 @@ const TestCollection = ({ setShowNavButtons }) => {
                 </div>
             </div>
 
-            <div className="flex-grow p-6">
-                <h1 className="text-3xl font-bold text-white mb-4">Test Collections</h1>
-                {error && <p className="text-red-500">{error}</p>}
-                <ul className="space-y-4">
-                    {testCollections.map((collection, index) => (
-                        <li key={index} className="bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-xl font-semibold">{collection.testName}</h2>
-                            <p className="text-gray-700">{collection.testDescription}</p>
-                            <p className="text-gray-600">Created by: {collection.createdBy}</p>
-                            <button
-                                className="mt-2 bg-teal-500 text-white py-2 px-4 rounded hover:bg-teal-600 transition duration-300"
-                                onClick={() => navigate(`/test/${collection.id}`)}
-                            >
-                                View Test
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+            <div className="container mx-auto px-4 py-8">
+                <h2 className="text-3xl font-bold mb-4 text-white">Test Collection</h2>
+                {error && <div className="text-red-500 mb-4">{error}</div>}
+
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200 bg-white rounded-lg">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sr. No.</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test Paper Name</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher Username</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Number of Questions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {testCollections.length > 0 ? (
+                                testCollections.map((collection, index) => {
+                                    // Split the paperName to get only the papername part
+                                    const paperName = collection.paperName.split('_')[0];
+
+                                    return (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{paperName}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{collection.teacherUsername}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{collection.totalQuestions}</td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No test collections found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
