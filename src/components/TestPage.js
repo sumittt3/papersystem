@@ -271,13 +271,13 @@
         const isFirstQuestion = currentQuestionIndex === 0;
         const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
         const paperName = paperDetails.paperName.split('_')[0];
-        return (
-    <div className="min-h-screen bg-gray-500 p-4 md:p-8 w-screen flex items-center justify-center">
+       return (
+    <div className="min-h-screen bg-gray-500 p-6 md:p-8 w-screen flex items-center justify-center">
         <div className="container mx-auto max-w-3xl bg-gray-600 rounded-lg shadow-lg p-6">
             <h2 className="text-5xl font-bold mb-6 text-center font-serif text-white">{paperName}</h2>
             <p className="text-2xl mb-6 text-end font-mono text-white">Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</p>
             {showWarning && (
-                <div className="mb-6 bg-yellow-200 text-yellow-800 p-4 rounded-lg">
+                <div className="mb-6 bg-yellow-200 text-yellow-800 p-4 rounded-lg shadow-md">
                     <p className="text-lg"> Warning: Pressing ESC will submit the test. Do not press ESC again unless you want to submit.
                         Additionally, switching to another window or application will also submit the test.</p>
                 </div>
@@ -333,4 +333,4 @@
         </div>
     </div>
 );
-    export default TestPage;
+export default TestPage;
