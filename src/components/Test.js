@@ -56,8 +56,7 @@ const Test = ({ setShowNavButtons }) => {
 
             {/* Profile Content */}
             <div className="container mx-auto px-4 py-8">
-                <FileUploadComp username={username} /> {/* Render the FileUpload component */}
-                {/* Add specific content related to test management here */}
+                <FileUploadComp username={username} /> 
 
             </div>
         </div>
