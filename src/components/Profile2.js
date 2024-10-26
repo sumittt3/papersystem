@@ -1,53 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 const Profile2 = ({ setShowNavButtons }) => {
+    const { username } = useParams();
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const email = params.get('email');
+    const navigate = useNavigate();
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
-    const navigate = useNavigate();
-    const location = useLocation();
 
-    const { username } = useParams();
-    const params = new URLSearchParams(location.search);
-    const email = params.get('email');
-
-    // Function to handle password change
-    const handleChangePassword = async (event) => {
-        event.preventDefault();
-
-        try {
-            const response = await axios.post('https://papersystem.onrender.com/api/student/change-password', {
-                username,
-                currentPassword,
-                newPassword,
-            });
-
-            setSuccessMessage(response.data.message);
-            setCurrentPassword('');
-            setNewPassword('');
-            setConfirmPassword('');
-            setError(''); // Clear any previous error messages
-            setTimeout(() => {
-                setSuccessMessage('');
-            }, 2000);
-        } catch (error) {
-            if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
-            } else {
-                setError('Failed to change password. Please try again later.');
-            }
-        }
-    };
-
-    // Effect to manage navigation buttons visibility
     useEffect(() => {
-        setShowNavButtons(false); // Hide navigation buttons when profile page is active
-        return () => setShowNavButtons(true); // Reset when component unmounts
+        setShowNavButtons(false);
+        return () => setShowNavButtons(true);
     }, [setShowNavButtons]);
 
     const handleLogout = () => {
@@ -56,48 +26,67 @@ const Profile2 = ({ setShowNavButtons }) => {
         navigate('/');
     };
 
-    return (
-        <div className="min-h-screen w-screen bg-teal-800 flex flex-col">
-            <div className="bg-gray-800 text-white flex justify-between items-center px-6 py-4 shadow-lg">
-                {/* Left Side: Logo and Navigation Links */}
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 bg-gradient-to-r from-blue-300 to-green-300 p-2 rounded-lg shadow-lg">
-                        <span className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
-                            Question <span className="text-green-700">Craft</span>
-                        </span>
-                    </div>
-                    {/* Mobile Menu Button */}
-                    <button
-                        className="md:hidden text-white hover:text-gray-200"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    >
-                        {isMobileMenuOpen ? '✖️' : '☰'} {/* Toggle between menu icon and close icon */}
-                    </button>
-                    {/* Navigation Links */}
-                    <div className={`flex flex-row gap-6 mt-0 md:flex ${isMobileMenuOpen ? 'flex-col absolute bg-gray-800 p-4 md:flex-row md:static md:p-0' : 'hidden'}`}>
-                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
-                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
-                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
-                    </div>
-                </div>
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
 
-                {/* Right Side: User Info and Logout */}
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 group">
-                        <svg className="w-6 h-6 text-white group-hover:text-gray-200 transition duration-300" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                        <h2 className="text-xl font-bold group-hover:text-gray-200 transition duration-300">{username}</h2>
-                    </div>
-                    <div>
-                        <button className="flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 shadow-md" onClick={handleLogout}>
-                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 13v-2h-8v2h8zm-6-6h-2v12h2v-12zm8-4v16h-12v-16h12zm0-2h-12c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-16c0-1.1-.9-2-2-2z" />
-                            </svg>
-                            Logout
-                        </button>
-                    </div>
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        setError('');
+        setSuccessMessage('');
+
+        if (newPassword !== confirmPassword) {
+            setError('New password and confirmation do not match');
+            return;
+        }
+
+        try {
+            // Make API call to change password here
+            const response = await fetch('https://papersystem.onrender.com/api/student/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    currentPassword,
+                    newPassword,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to change password');
+            }
+
+            const data = await response.json();
+            setSuccessMessage(data.message);
+            // Optionally clear the fields
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    return (
+        <div className="min-h-screen w-screen bg-teal-700 flex flex-col">
+            <div className="bg-gray-800 text-white flex justify-between items-center px-4 py-2 sm:px-6 sm:py-4 shadow-lg">
+                <h2 className="text-xl font-bold">{username}</h2>
+                <div className="relative sm:hidden">
+                    <button onClick={toggleDropdown} className="text-white">
+                        &#9776; {/* Hamburger icon */}
+                    </button>
+                    {dropdownOpen && (
+                        <div className="absolute right-0 bg-gray-800 text-white shadow-lg rounded-md">
+                            <a href={`/StudentDashboard/${username}?email=${email}`} className="block px-4 py-2 hover:bg-gray-700">Dashboard</a>
+                            <a href={`/Profile2/${username}?email=${email}`} className="block px-4 py-2 hover:bg-gray-700">Change Password</a>
+                            <a href={`/TestCollection/${username}?email=${email}`} className="block px-4 py-2 hover:bg-gray-700">Test Collection</a>
+                            <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-700 w-full text-left">Logout</button>
+                        </div>
+                    )}
                 </div>
+                <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded hidden sm:block">
+                    Logout
+                </button>
             </div>
 
             {/* Profile Content */}
