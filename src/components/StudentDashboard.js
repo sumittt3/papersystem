@@ -35,9 +35,16 @@ const StudentDashboard = ({ setShowNavButtons }) => {
                             Question <span className="text-green-700">Craft</span>
                         </span>
                     </div>
+                    {/* Navigation Links for larger screens */}
+                    <div className="hidden sm:flex gap-6">
+                        <a href={`/StudentDashboard/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Dashboard</a>
+                        <a href={`/Profile2/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Change Password</a>
+                        <a href={`/TestCollection/${username}?email=${email}`} className="text-white hover:text-gray-200 transition duration-300 text-lg font-bold">Test Collection</a>
+                    </div>
                 </div>
-                
-                <div className="relative">
+
+                {/* Dropdown Menu for Mobile Devices */}
+                <div className="relative sm:hidden">
                     <button
                         onClick={toggleDropdown}
                         className="flex items-center text-white hover:text-gray-200 transition duration-300"
@@ -86,3 +93,4 @@ const StudentDashboard = ({ setShowNavButtons }) => {
 };
 
 export default StudentDashboard;
+
