@@ -123,7 +123,7 @@ const TestCollection = ({ setShowNavButtons }) => {
                                 Test Collection
                             </a>
                             <button
-                                className="flex items-center block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-700"
+                                className="flex items-center w-full text-left px-4 py-2 text-red-500 hover:bg-red-100"
                                 onClick={handleLogout}
                             >
                                 Logout
@@ -169,6 +169,22 @@ const TestCollection = ({ setShowNavButtons }) => {
                             )}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Responsive Stack for Mobile Devices */}
+                <div className="block sm:hidden mt-4">
+                    {testCollections.length > 0 ? (
+                        testCollections.map((collection, index) => (
+                            <div key={index} className="border rounded-lg mb-2 p-4 bg-white">
+                                <h3 className="font-bold text-gray-900">Test {index + 1}</h3>
+                                <p><strong>Test Paper Name:</strong> {collection.paperName.split('_')[0]}</p>
+                                <p><strong>Teacher Username:</strong> {collection.teacherUsername}</p>
+                                <p><strong>Number of Questions:</strong> {collection.totalQuestions}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="text-center text-gray-500">No test collections found.</div>
+                    )}
                 </div>
             </div>
         </div>
