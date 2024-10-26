@@ -154,54 +154,56 @@ const Profile2 = ({ setShowNavButtons }) => {
                 </div>
             </div>
 
-            {/* Main Content */}
-            <div className="flex flex-col items-center justify-center flex-grow bg-teal-700 p-6">
-                <h2 className="text-3xl font-semibold text-white">Change Password</h2>
-                <form onSubmit={handleChangePassword} className="w-full max-w-md mt-4">
+             {/* Profile Content */}
+            <div className="container mx-auto px-4 py-8">
+                <h2 className="text-3xl font-bold mb-4 text-white">Change Password</h2>
+                {error && <div className="text-red-500 mb-4">{error}</div>}
+                {successMessage && <div className="text-green-500 mb-4">{successMessage}</div>}
+
+                {/* Password Change Form */}
+                <form onSubmit={handleChangePassword}>
                     <div className="mb-4">
-                        <label className="block text-white font-bold mb-2" htmlFor="currentPassword">
+                        <label htmlFor="currentPassword" className="block text-sm font-medium text-white">
                             Current Password
                         </label>
                         <input
                             type="password"
                             id="currentPassword"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-white font-bold mb-2" htmlFor="newPassword">
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-white">
                             New Password
                         </label>
                         <input
                             type="password"
                             id="newPassword"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-white font-bold mb-2" htmlFor="confirmPassword">
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">
                             Confirm New Password
                         </label>
                         <input
                             type="password"
                             id="confirmPassword"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                         />
                     </div>
-                    {error && <p className="text-red-500 text-xs italic">{error}</p>}
-                    {successMessage && <p className="text-green-500 text-xs italic" aria-live="polite">{successMessage}</p>}
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 mt-4"
+                        className="inline-block bg-slate-900 hover:bg-blue-200 hover:text-black text-white px-4 py-2 font-semibold rounded-md transition duration-300"
                     >
                         Change Password
                     </button>
