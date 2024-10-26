@@ -52,8 +52,13 @@ const Profile = ({ setShowNavButtons }) => {
         navigate('/');
     };
 
+    // Function to toggle dropdown visibility
+    const toggleDropdown = () => {
+        setDropdownOpen((prev) => !prev);
+    };
+
     return (
-          <div className="min-h-screen w-screen bg-teal-700 flex flex-col">
+        <div className="min-h-screen w-screen bg-teal-700 flex flex-col">
             <div className="bg-gray-800 text-white flex justify-between items-center px-4 py-2 sm:px-6 sm:py-4 shadow-lg">
                 <div className="flex items-center gap-4 sm:gap-6">
                     <div className="flex items-center gap-2 bg-gradient-to-r from-blue-300 to-green-300 p-2 rounded-lg shadow-lg">
@@ -111,19 +116,18 @@ const Profile = ({ setShowNavButtons }) => {
                         onClick={toggleDropdown}
                         className="bg-gray-800 text-white p-2 rounded-lg focus:outline-none"
                     >
-                            
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
-        </svg>
+                            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+                        </svg>
                     </button>
                     {dropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
-                            <a href={`/TeacherDashboard/${username}`} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Dashboard</a>
-                            <a href={`/Profile/${username}`} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Change Password</a>
-                            <a href={`/Test/${username}`} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Create Test</a>
+                        <div className="absolute right-0 w-48 bg-white text-black shadow-lg mt-2 rounded-lg">
+                            <a href={`/TeacherDashboard/${username}`} className="block px-4 py-2 hover:bg-gray-200">Dashboard</a>
+                            <a href={`/Profile/${username}`} className="block px-4 py-2 hover:bg-gray-200">Change Password</a>
+                            <a href={`/Test/${username}`} className="block px-4 py-2 hover:bg-gray-200">Create Test</a>
                             <button
                                 onClick={handleLogout}
-                                className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-200"
                             >
                                 Logout
                             </button>
@@ -132,56 +136,45 @@ const Profile = ({ setShowNavButtons }) => {
                 </div>
             </div>
 
-            {/* Profile Content */}
-            <div className="container mx-auto px-4 py-8">
-                <h2 className="text-3xl font-bold mb-4 text-white">Change Password</h2>
-                {error && <div className="text-red-500 mb-4">{error}</div>}
-                {successMessage && <div className="text-green-500 mb-4">{successMessage}</div>}
-
-                {/* Password Change Form */}
-                <form onSubmit={handleChangePassword}>
+            {/* Profile Change Password Section */}
+            <div className="flex-grow flex justify-center items-center bg-teal-700">
+                <form onSubmit={handleChangePassword} className="bg-white p-6 rounded-lg shadow-md w-full sm:w-96">
+                    <h2 className="text-2xl font-bold mb-6 text-center">Change Password</h2>
+                    {error && <p className="text-red-500 text-center">{error}</p>}
+                    {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
                     <div className="mb-4">
-                        <label htmlFor="currentPassword" className="block text-sm font-medium text-white">
-                            Current Password
-                        </label>
+                        <label className="block text-gray-700">Current Password</label>
                         <input
                             type="password"
-                            id="currentPassword"
                             value={currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
+                            className="border border-gray-300 p-2 w-full rounded"
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="newPassword" className="block text-sm font-medium text-white">
-                            New Password
-                        </label>
+                        <label className="block text-gray-700">New Password</label>
                         <input
                             type="password"
-                            id="newPassword"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
+                            className="border border-gray-300 p-2 w-full rounded"
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">
-                            Confirm New Password
-                        </label>
+                        <label className="block text-gray-700">Confirm New Password</label>
                         <input
                             type="password"
-                            id="confirmPassword"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
+                            className="border border-gray-300 p-2 w-full rounded"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="inline-block bg-slate-900 hover:bg-blue-200 hover:text-black text-white px-4 py-2 font-semibold rounded-md transition duration-300"
+                        className="bg-teal-600 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-300 w-full"
                     >
                         Change Password
                     </button>
