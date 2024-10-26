@@ -16,9 +16,9 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
     useEffect(() => {
         const fetchPapers = async () => {
             try {
-                const response = await axios.get('https://papersystem.onrender.com/api/papers/count', {
+                const response = await axios.get('${process.env.REACT_APP_BACKEND_URL}/api/papers/count', {
                     params: {
-                        username: username
+                        username: username // Assuming 'username' is defined somewhere in your component
                     }
                 });
                 setTotalTests(response.data.count);
