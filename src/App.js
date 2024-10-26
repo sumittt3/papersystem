@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { FaBars, FaTimes } from 'react-icons/fa'; // Import icons for toggle button
 import FileUploadPage from './components/FileUpload';
 import StudentLoginPage from './components/StudentLoginPage';
 import TeacherLoginPage from './components/TeacherLoginPage';
@@ -13,13 +14,17 @@ import TestCollection from './components/TestCollection';
 import ProtectedRoute2 from './components/ProtectedRoute2';
 import TestPageEntrance from './components/TestPageEntrance';
 import TestPage from './components/TestPage';
+
 const App = () => {
   const [showNavButtons, setShowNavButtons] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State to toggle mobile menu
 
   const handleFileUpload = (file) => {
-    // Simulate processing the Excel file (replace with actual logic)
     console.log('Processing Excel file:', file);
-    // Add any processing logic here if needed
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -85,26 +90,40 @@ const App = () => {
             path="/TestPage"
             element={<TestPage setShowNavButtons={setShowNavButtons} />}
           />
-
         </Routes>
+
         {/* Navigation Buttons */}
         {showNavButtons && (
-          <div className="absolute top-10 right-12 space-x-4">
-            <Link to="/">
-              <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Home
-              </button>
-            </Link>
-            <Link to="/teacher-login">
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Teacher Login
-              </button>
-            </Link>
-            <Link to="/student-login">
-              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Student Login
-              </button>
-            </Link>
+          <div className="fixed top-4 right-4 sm:right-12">
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={toggleMobileMenu}
+              className="sm:hidden bg-gray-500 text-white p-2 rounded-full focus:outline-none"
+            >
+              {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+            </button>
+
+            {/* Navigation Links */}
+            <div
+              className={`${isMobileMenuOpen ? 'block' : 'hidden'
+                } sm:flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-2 sm:mt-0`}
+            >
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+                <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 rounded w-full sm:w-auto text-center">
+                  Home
+                </button>
+              </Link>
+              <Link to="/teacher-login" onClick={() => setIsMobileMenuOpen(false)}>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto text-center">
+                  Teacher Login
+                </button>
+              </Link>
+              <Link to="/student-login" onClick={() => setIsMobileMenuOpen(false)}>
+                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto text-center">
+                  Student Login
+                </button>
+              </Link>
+            </div>
           </div>
         )}
       </div>
