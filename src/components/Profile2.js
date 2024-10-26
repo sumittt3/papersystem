@@ -62,12 +62,11 @@ const Profile2 = ({ setShowNavButtons }) => {
     };
 
     return (
-        <div className="min-h-screen w-screen bg-teal-800 flex flex-col">
-            <div className="bg-gray-800 text-white flex justify-between items-center px-6 py-4 shadow-lg">
-                {/* Left Side: Logo and Navigation Links */}
-                <div className="flex items-center gap-6">
+        <div className="min-h-screen w-screen bg-teal-700 flex flex-col">
+            <div className="bg-gray-800 text-white flex justify-between items-center px-4 py-2 sm:px-6 sm:py-4 shadow-lg">
+                <div className="flex items-center gap-4 sm:gap-6">
                     <div className="flex items-center gap-2 bg-gradient-to-r from-blue-300 to-green-300 p-2 rounded-lg shadow-lg">
-                        <span className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
+                        <span className="text-xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
                             Question <span className="text-green-700">Craft</span>
                         </span>
                     </div>
