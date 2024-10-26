@@ -26,7 +26,7 @@ const Profile2 = ({ setShowNavButtons }) => {
         }
 
         try {
-               const response = await axios.post('https://papersystem.onrender.com/api/api/student/change-password', {
+               const response = await axios.post('https://papersystem.onrender.com/api/student/change-password', {
                 username,
                 currentPassword,
                 newPassword,
