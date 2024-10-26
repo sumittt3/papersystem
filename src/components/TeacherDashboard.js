@@ -207,7 +207,6 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                                 <tr>
                                     <th className="border border-gray-200 px-10 py-4 text-left">#</th>
                                     <th className="border border-gray-200 px-5 py-4 text-left">Username</th>
-                                    <th className="border border-gray-200 px-5 py-4 text-left">Paper Name</th>
                                     <th className="border border-gray-200 px-5 py-4 text-left">Score</th>
                                     <th className="border border-gray-200 px-5 py-4 text-left">Date</th>
                                     <th className="border border-gray-200 px-5 py-4 text-left">Unique Code</th>
@@ -219,7 +218,6 @@ const TeacherDashboard = ({ setShowNavButtons }) => {
                                         <tr key={test._id} className="hover:bg-gray-100">
                                             <td className="px-10 py-4 text-sm text-gray-900">{index + 1}</td>
                                             <td className="px-5 py-4 text-sm text-gray-900">{test.studentUsername}</td>
-                                            <td className="px-5 py-4 text-sm text-gray-900">{test.paperName}</td>
                                             <td className="px-5 py-4 text-sm text-gray-900">{test.score}/{test.totalQuestions}</td>
                                             <td className="px-5 py-4 text-sm text-gray-900">{new Date(test.testDate).toLocaleDateString()}</td>
                                             <td className="px-5 py-4 text-sm text-gray-900">{test.uniqueCode}</td>
